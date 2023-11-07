@@ -1,0 +1,116 @@
+** sch_path: /home/oe23ranan/caravel_user_project_analog/xschem/tb/comparator/tran_comparator.sch
+**.subckt tran_comparator
+xcom vss vdd clkc outp vp outn vn double-comparator
+x15 clk vss vss vdd vdd clkc sky130_fd_sc_hd__inv_2
+VSS vss GND 0
+VDD vdd GND 1.2
+C1 outn vss 10f m=1
+C2 outp vss 10f m=1
+Vclk clk GND PULSE(0 1 1e-9 1e-9 1e-9 1e-6 2e-6)
+VBIAS bias GND 0.6
+x1 GND vss vss vdd vdd net3 sky130_fd_sc_hd__inv_1
+VP vp bias 2.5m
+VN vn bias -2.5m
+**** begin user architecture code
+.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_sc_hd/latest/cells/inv/sky130_fd_sc_hd__inv_2.spice
+.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_sc_hd/latest/cells/inv/sky130_fd_sc_hd__inv_1.spice
+
+*.include /home/oe23ranan/caravel_user_project_analog/xschem/design/tb/comparator/ctl.sp
+
+*vt0 trim_0_ 0 1.2
+*vt1 trim_1_ 0 1.2
+*vt2 trim_2_ 0 1.2
+*vt3 trim_3_ 0 1.2
+*vt4 trim_4_ 0 1.2
+
+.options method trap
+
+.tran 1ns 6us
+
+.control
+.param MC_SWITCH=0
+*run
+*meas tran tdiff trig V(outp) val=0.05 rise=2 targ V(outp) val=1.15 rise=2
+*let ivdd=-vdd#branch
+*let power=ivdd*1.2
+*wrdata power.data power
+*meas tran st when v(outp)=1.15 rise=2
+*meas tran gt when v(outp)=1.15 fall=2
+*meas tran con integ power from=st to=gt
+*.endc
+
+let start_pv = 0.5m
+let start_mv = -0.5m
+let goal_v = 13m
+let delta_v = 2m
+let act_pv = start_pv
+let act_mv = start_mv
+print '' > result.data
+while act_pv le goal_v
+    alter VP act_pv
+    alter VN act_mv
+    if act_pv = 0.5m or act_pv = 2.5m or act_pv = 12.5m
+        run
+        * speed
+        meas tran tdiff trig V(outp) val=0.05 rise=2 targ V(outp) val=1.15 rise=2
+        let vdiff = act_pv-act_mv
+        * power
+        let ivdd=-vdd#branch
+        let power=ivdd*1.2
+        meas tran st when v(outp)=1.15 rise=2
+        meas tran gt when v(outp)=1.15 fall=2
+        meas tran con integ power from=st to=gt
+        *wrdata power.data power
+        print vdiff tdiff con >> result.data
+    end
+    let act_pv = act_pv + delta_v
+    let act_mv = act_mv - delta_v
+end
+.endc
+
+* FET CORNERS
+.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/models/corners/tt.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs.spice
+
+* TT + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/tt_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/tt_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/tt_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/tt_rmin_cmax.spice
+
+* FF + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff_rmin_cmax.spice
+
+
+* SS + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss_rmin_cmax.spice
+
+* SF + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf_rmin_cmax.spice
+
+* FS + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs_rmin_cmax.spice
+
+**** end user architecture code
+**.ends
+
+*.include comparator.spice
+.include double-comparator.spice
+
+.GLOBAL GND
+.end

@@ -3,12 +3,49 @@
 *  Design library name: cp_lib1
 *  Design cell name: cp_vco_tb_1
 *  Design view name: schematic
-.lib 'saed32nm.lib' TT
+* FET CORNERS
+.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/models/corners/tt.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs.spice
+
+* TT + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/tt_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/tt_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/tt_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/tt_rmin_cmax.spice
+
+* FF + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ff_rmin_cmax.spice
+
+
+* SS + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/ss_rmin_cmax.spice
+
+* SF + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/sf_rmin_cmax.spice
+
+* FS + R + C
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs_rmax_cmax.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs_rmin_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs_rmax_cmin.spice
+*.include /tmp/caravel_tutorial/pdk/skywater-pdk/libraries/sky130_fd_pr_ngspice/latest/corners/fs_rmin_cmax.spice
+
 
 *Custom Compiler Version S-2021.09
 *Mon Feb 28 18:25:37 2022
 
-.global gnd! vdd!
+.global GND
 ********************************************************************************
 * Library          : cp_lib1
 * Cell             : cp_vco_2
@@ -16,20 +53,46 @@
 * View Search List : hspice hspiceD schematic spice veriloga
 * View Stop List   : hspice hspiceD
 ********************************************************************************
-.subckt cp_vco_2 vb vdd vin+ vin- vn vout+ vout- vt_bulk_n_gnd! vt_bulk_p_vdd!
-xm5 vout+ vin- vdd vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-xm4 vout+ vb vdd vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-xm3 vout- net25 vdd vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-xm2 vout+ net35 vdd vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-xm1 vout- vb vdd vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-xm0 vout- vin+ vdd vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-xm12 vout+ vin- gnd! vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm11 net35 vb vout+ vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm10 vout+ vin- net23 vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm9 net23 vn gnd! vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm8 net25 vb vout- vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm7 vout- vin+ net23 vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm6 vout- vin+ gnd! vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
+.subckt cp_vco_2 vb vdd vin+ vin- vn vout+ vout- vss vdd
+xm5 vout+ vin- vdd vdd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm4 vout+ vb vdd vdd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm3 vout- net25 vdd vdd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm2 vout+ net35 vdd vdd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm1 vout- vb vdd vdd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm0 vout- vin+ vdd vdd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm12 vout+ vin- vss vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm11 net35 vb vout+ vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm10 vout+ vin- net23 vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm9 net23 vn vss vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm8 net25 vb vout- vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm7 vout- vin+ net23 vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm6 vout- vin+ vss vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
 .ends cp_vco_2
 
 ********************************************************************************
@@ -39,11 +102,19 @@ xm6 vout- vin+ gnd! vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
 * View Search List : hspice hspiceD schematic spice veriloga
 * View Stop List   : hspice hspiceD
 ********************************************************************************
-.subckt buffer vdd vgg inr out
-xm1 out net13 vdd vdd p105 w=0.1u l=0.03u nf=1 m=1
-xm0 net13 inr vdd vdd p105 w=0.1u l=0.03u nf=1 m=1
-xm3 net13 inr vgg vgg n105 w=0.1u l=0.03u nf=1 m=1
-xm2 out net13 vgg vgg n105 w=0.1u l=0.03u nf=1 m=1
+.subckt buffer vdd vss inr out
+xm1 out net13 vdd vdd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm0 net13 inr vdd vdd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm3 net13 inr vss vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm2 out net13 vss vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
 .ends buffer
 
 ********************************************************************************
@@ -53,14 +124,26 @@ xm2 out net13 vgg vgg n105 w=0.1u l=0.03u nf=1 m=1
 * View Search List : hspice hspiceD schematic spice veriloga
 * View Stop List   : hspice hspiceD
 ********************************************************************************
-.subckt bias vc vdd vn vp vt_bulk_n_gnd! vt_bulk_p_vdd!
-xm3 vn vn gnd! vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm2 vn vn gnd! vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm1 vp vc gnd! vt_bulk_n_gnd! n105 w=0.1u l=0.03u nf=1 m=1
-xm6 net26 vp vdd vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-xm5 vn gnd! net26 vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-xm4 vp vp vdd vt_bulk_p_vdd! p105 w=0.1u l=0.03u nf=1 m=1
-r8 vp gnd! r=1K
+.subckt bias vc vdd vn vp vss vddd
+xm3 vn vn vss vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm2 vn vn vss vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm1 vp vc vss vss sky130_fd_pr__nfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm6 net26 vp vdd vddd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm5 vn vss net26 vddd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+xm4 vp vp vdd vddd sky130_fd_pr__pfet_01v8 L=0.35 W=4 nf=1 ad='int((nf+1)/2) * W/nf * 0.29' as='int((nf+2)/2) * W/nf * 0.29'
++ pd='2*int((nf+1)/2) * (W/nf + 0.29)' ps='2*int((nf+2)/2) * (W/nf + 0.29)' nrd='0.29 / W' nrs='0.29 / W'
++ sa=0 sb=0 sd=0 mult=1 m=1
+r8 vp vss r=1K
 .ends bias
 
 ********************************************************************************
@@ -70,40 +153,42 @@ r8 vp gnd! r=1K
 * View Search List : hspice hspiceD schematic spice veriloga
 * View Stop List   : hspice hspiceD
 ********************************************************************************
-xi23 net128 net146 net107 voutput net129 net143 net142 gnd! vdd! cp_vco_2
-xi17 net128 net146 net145 net144 net129 voutput net107 gnd! vdd! cp_vco_2
-xi16 net128 net146 net143 net142 net129 net145 net144 gnd! vdd! cp_vco_2
-v9 net146 gnd! dc=0.8
-v19 net90 gnd! dc=0.9
-xi11 net146 gnd! net107 v1 buffer
-xi12 net146 gnd! voutput v2 buffer
-xi18 net90 net146 net129 net128 gnd! vdd! bias
 
+VDD vdd GND 1.8
+VSS vss GND 0
 
-
-
-
-
-
-
-.tran '0.1n' '10n' name=tran
-
-.option primesim_remove_probe_prefix = 0
-.probe v(*) i(*) level=1
-.probe tran v(voutput)
+xi23 net128 net146 net107 voutput net129 net143 net142 vss vdd cp_vco_2
+xi17 net128 net146 net145 net144 net129 voutput net107 vss vdd cp_vco_2
+xi16 net128 net146 net143 net142 net129 net145 net144 vss vdd cp_vco_2
+v9 net146 GND dc=1.2
+v19 net90 GND dc=1.0
+xi11 net146 vss net107 v1 buffer
+xi12 net146 vss voutput v2 buffer
+xi18 net90 net146 net129 net128 vss vdd bias
 
 .temp 25
-
 .ic  v(net107)=1  v(net127)=-1
 
-.option primesim_output=wdf
-
-
-.option parhier = LOCAL
+.tran 0.1n 500n
 
 
 
+.control
+
+run
+save all
+meas tran t trig V(voutput) val=1.0 rise=10 targ V(voutput) val=1.0 rise=11
+meas tran t2 trig V(voutput) val=1.0 rise=30 targ V(voutput) val=1.0 rise=31
+
+let freq = 1/t
+let freq2 = 1/t2
+print freq freq2
+plot voutput
+plot net128 net129
 
 
+
+.endc
 
 .end
+
